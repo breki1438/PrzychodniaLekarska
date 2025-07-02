@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import prisma from '../lib/prisma';
 
 export const getPatient = async (id: number) => {
     return prisma.patient.findUnique({ where: { id } });
@@ -18,4 +18,8 @@ export const deletePatient = async (id: number) => {
 
 export const getPatients = async () => {
     return prisma.patient.findMany();
+};
+
+export const getPatientById = async (prismaInstance: any, id: number) => {
+    return prismaInstance.patient.findUnique({ where: { id } });
 };
