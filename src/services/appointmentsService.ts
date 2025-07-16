@@ -3,17 +3,30 @@ import { getPatient } from './patientsService';
 
 
 export const getAppointments = async () => {
-    return prisma.appointment.findMany({ include: { patient: true } });
+    return prisma.appointment.findMany({ include: { patient: true, doctor: true } });
 };
 
 export const createAppointment = async (data: any) => {
     const patient = await getPatient(data.patientId);
     if (!patient) throw new Error('Patient not found');
-    return prisma.appointment.create({ data });
+    return prisma.appointment.create({
+        data: {
+            date: new Date(data.date),
+            patient: { connect: { id: data.patientId } },
+            doctor: { connect: { id: data.doctorId } }
+        }
+    });
 };
 
 export const updateAppointment = async (id: number, data: any) => {
-    return prisma.appointment.update({ where: { id }, data });
+    return prisma.appointment.update({
+        where: { id },
+        data: {
+            date: new Date(data.date),
+            patient: { connect: { id: data.patientId } },
+            doctor: { connect: { id: data.doctorId } }
+        }
+    });
 };
 
 export const deleteAppointment = async (id: number) => {
@@ -23,6 +36,6 @@ export const deleteAppointment = async (id: number) => {
 export const getAppointmentById = async (id: number) => {
     return prisma.appointment.findUnique({
         where: { id },
-        include: { patient: true }
+        include: { patient: true, doctor: true }
     });
 };

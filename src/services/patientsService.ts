@@ -5,7 +5,11 @@ export const getPatient = async (id: number) => {
 };
 
 export const createPatient = async (data: any) => {
-    return prisma.patient.create({ data });
+    const { name, pesel, phone, email, gender } = data;
+    if (!name || !pesel || !phone || !email || !gender) {
+        throw new Error("Wszystkie pola są wymagane.");
+    }
+    return prisma.patient.create({ data: { name, pesel, phone, email, gender } });
 };
 
 export const updatePatient = async (id: number, data: any) => {

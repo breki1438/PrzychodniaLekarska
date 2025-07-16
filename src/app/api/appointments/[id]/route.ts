@@ -11,7 +11,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_: NextRequest, context: { params: { id: string } }) {
+    const { params } = context;
     try {
         await deleteAppointment(Number(params.id));
         return NextResponse.json({ message: 'Deleted' });

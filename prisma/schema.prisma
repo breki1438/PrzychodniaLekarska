@@ -10,14 +10,25 @@ datasource db {
 model Patient {
   id     Int           @id @default(autoincrement())
   name   String
+  pesel  String        @unique
+  phone  String
   email  String        @unique
+  gender String
   visits Appointment[]
 }
 
 model Appointment {
   id        Int      @id @default(autoincrement())
   date      DateTime
-  doctor    String
   patientId Int
   patient   Patient  @relation(fields: [patientId], references: [id])
+  doctorId  Int
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+}
+
+model Doctor {
+  id           Int           @id @default(autoincrement())
+  name         String
+  specialty    String
+  appointments Appointment[]
 }
